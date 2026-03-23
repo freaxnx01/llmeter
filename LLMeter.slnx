@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LLMeter/LLMeter.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LLMeter.Tests/LLMeter.Tests.csproj" />
+  </Folder>
+</Solution>
