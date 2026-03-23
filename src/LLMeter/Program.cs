@@ -1,5 +1,6 @@
 using LLMeter.Configuration;
 using LLMeter.Data;
+using LLMeter.Endpoints;
 using LLMeter.Providers;
 using LLMeter.Services;
 using Microsoft.EntityFrameworkCore;
@@ -34,11 +35,18 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<LLMeterDbContext>();
-    db.Database.EnsureCreated();
+    var options = scope.ServiceProvider.GetRequiredService<DbContextOptions<LLMeterDbContext>>();
+    var isSqlite = options.Extensions.Any(e => e.GetType().Name.Contains("Sqlite"));
+    if (isSqlite)
+    {
+        var db = scope.ServiceProvider.GetRequiredService<LLMeterDbContext>();
+        db.Database.EnsureCreated();
+    }
 }
 
 app.MapGet("/healthz", () => Results.Ok(new { status = "healthy" }));
+
+app.MapUsageEndpoints();
 
 app.Run();
 
