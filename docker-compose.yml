@@ -1,0 +1,19 @@
+services:
+  llmeter:
+    build: .
+    container_name: llmeter
+    ports:
+      - "8080:8080"
+    volumes:
+      - llmeter-data:/app/data
+    environment:
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/llmeter.db
+      - Providers__Anthropic__AdminApiKey=${ANTHROPIC_ADMIN_API_KEY}
+      - Providers__Anthropic__TotalCredits=${ANTHROPIC_TOTAL_CREDITS:-100}
+      - Providers__OpenRouter__ManagementApiKey=${OPENROUTER_MANAGEMENT_API_KEY}
+      - Providers__Mistral__LiteLlmBaseUrl=${LITELLM_BASE_URL:-http://litellm:4000}
+      - Providers__Mistral__Budget=${MISTRAL_BUDGET:-20}
+    restart: unless-stopped
+
+volumes:
+  llmeter-data:
